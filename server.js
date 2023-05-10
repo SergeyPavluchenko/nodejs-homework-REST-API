@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const app = require("./app");
 const { DB_HOST } = require("./config");
+// const { DB_HOST } = process.env;
 
 mongoose
   .connect(DB_HOST)
@@ -13,5 +14,3 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
-
-/* nMMLBt4OWbpGVOiO */
