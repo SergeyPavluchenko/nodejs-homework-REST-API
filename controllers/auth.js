@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
+const Jimp = require("jimp");
+const { error } = require("console");
 const { SECRET_KEY } = process.env;
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
@@ -78,6 +80,13 @@ const logout = async (req, res) => {
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
+  await Jimp.read(tempUpload)
+    .then((img) => {
+      return img.resize(250, 250, Jimp.RESIZE_BEZIER).write(tempUpload);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
   await fs.rename(tempUpload, resultUpload);
